@@ -1,5 +1,7 @@
 package com.example.metetoobo;
 
+import static android.util.Log.println;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -16,7 +18,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
-
 
 
     @Override
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!data.isEmpty()){
                     JSONObject jsonObject = new JSONObject(data);
                     JSONArray temperatureMin = jsonObject.getJSONArray("tmin");
+
                 }
 
             } catch (MalformedURLException e){
