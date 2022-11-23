@@ -35,18 +35,19 @@ public class MeteoActivity extends AppCompatActivity {
         btnFetchData = findViewById(R.id.btn_fetchData);
 
         btnFetchData.setOnClickListener(view -> {
-            fetchData test = new fetchData();
+            FetchData test = new FetchData();
             test.runFetch("Rennes");
         });
     }
 
-    class fetchData extends Thread{
+    class FetchData extends Thread{
 
         String data = "";
 
         public void runFetch(String ville) {
             try {
-                URL url = new URL("https://api.meteo-concept.com/api/forecast/daily?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&name=" + ville);
+                //URL url = new URL("https://api.meteo-concept.com/api/forecast/daily?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=" + ville);
+                URL url = new URL("https://api.meteo-concept.com/api/forecast/daily?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=Rennes");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -54,7 +55,6 @@ public class MeteoActivity extends AppCompatActivity {
 
                 while ((line = bufferedReader.readLine()) != null){
                     data = data + line;
-
                 }
 
                 if (!data.isEmpty()){
@@ -62,8 +62,8 @@ public class MeteoActivity extends AppCompatActivity {
                     JSONArray temperatureMin = jsonObject.getJSONArray("tmin");
                     String tempMinString = temperatureMin.toString();
                     TextView textView = findViewById(R.id.text_showTempMin);
-                    textView.setText(tempMinString);
-
+                    //textView.setText(tempMinString);
+                    textView.setText("test1");
                 }
 
             } catch (MalformedURLException e){
