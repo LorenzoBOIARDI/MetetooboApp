@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 if (!data.isEmpty()){
                     JSONObject jsonObject = new JSONObject(data);
                     JSONArray temperatureMin = jsonObject.getJSONArray("tmin");
+                    String tempMinString = temperatureMin.toString();
+                    TextView textView = findViewById(R.id.text_showTempMin);
+                    textView.setText(tempMinString);
 
                 }
 

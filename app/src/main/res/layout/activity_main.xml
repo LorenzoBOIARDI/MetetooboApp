@@ -19,9 +19,11 @@
         android:text="Fetch Data"/>
 
     <TextView
-        android:id="@+id/showTemp"
+        android:id="@+id/text_showTempMin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Temperature Min :"
+        android:textSize="25sp"
         />
 
     <Button
