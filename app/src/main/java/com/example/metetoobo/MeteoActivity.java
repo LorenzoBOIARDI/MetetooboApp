@@ -37,8 +37,8 @@ public class MeteoActivity extends AppCompatActivity {
         btnFetchData = findViewById(R.id.btn_fetchData);
 
         btnFetchData.setOnClickListener(view -> {
-            URLFetchDataIntentService test = new URLFetchDataIntentService("Rennes");
-            tempMinString = test.urlFetcher("Rennes");
+            URLFetchDataIntentService test = new URLFetchDataIntentService();
+            //tempMinString = test.urlFetcher("Rennes");
             TextView textView = findViewById(R.id.text_showTempMin);
             textView.setText(tempMinString);
             //textView.setText("test1");
