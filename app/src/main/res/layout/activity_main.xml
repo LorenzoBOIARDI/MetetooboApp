@@ -12,18 +12,17 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/activity_btn_reglage"
+        android:id="@+id/btn_fetchData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="REGLAGES"/>
+        android:text="Fetch Data"/>
 
-    <Button
-        android:id="@+id/activity_btn_meteo"
+    <TextView
+        android:id="@+id/showTemp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="METEO"/>
+        />
 
     <Button
         android:id="@+id/activity_btn_dressing"

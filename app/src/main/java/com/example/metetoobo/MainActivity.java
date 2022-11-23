@@ -1,9 +1,13 @@
 package com.example.metetoobo;
 
-import static android.util.Log.println;
-
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,18 +23,31 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+        private Button btnFetchData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        initView();
     }
+
+    private void initView() {
+        btnFetchData = findViewById(R.id.btn_fetchData);
+
+        btnFetchData.setOnClickListener(view -> {
+            fetchData test = new fetchData();
+            test.runFetch("Rennes");
+        });
+    }
+
 
     class fetchData extends Thread{
 
         String data = "";
 
-        public void run(String ville) {
+        public void runFetch(String ville) {
             try {
                 URL url = new URL("https://api.meteo-concept.com/api/forecast/daily?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&name=" + ville);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
