@@ -27,10 +27,10 @@ public class MeteoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meteo);
         Intent intent = getIntent();
-        //initView();
+        initView();
     }
 
-/*
+
     private void initView() {
         btnFetchData = findViewById(R.id.btn_fetchData);
 
@@ -78,6 +78,4 @@ public class MeteoActivity extends AppCompatActivity {
 
 
     }
-
- */
 }
