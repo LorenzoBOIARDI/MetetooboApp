@@ -3,6 +3,7 @@ package com.example.metetoobo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import java.net.URL;
 public class MeteoActivity extends AppCompatActivity {
 
     private Button btnFetchData;
+    private String tempMinString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +37,21 @@ public class MeteoActivity extends AppCompatActivity {
         btnFetchData = findViewById(R.id.btn_fetchData);
 
         btnFetchData.setOnClickListener(view -> {
-            FetchData test = new FetchData();
-            test.runFetch("Rennes");
+            URLFetchDataIntentService test = new URLFetchDataIntentService("Rennes");
+            tempMinString = test.urlFetcher("Rennes");
+            TextView textView = findViewById(R.id.text_showTempMin);
+            textView.setText(tempMinString);
+            //textView.setText("test1");
         });
     }
-
+/*
     class FetchData extends Thread{
 
         String data = "";
 
+        FetchData() {
+        Log.d("METEOACTIVITY", "entering constructor");
+        }
         public void runFetch(String ville) {
             try {
                 //URL url = new URL("https://api.meteo-concept.com/api/forecast/daily?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=" + ville);
@@ -78,4 +86,6 @@ public class MeteoActivity extends AppCompatActivity {
 
 
     }
+
+ */
 }
