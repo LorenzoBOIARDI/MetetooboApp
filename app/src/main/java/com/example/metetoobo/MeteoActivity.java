@@ -36,34 +36,21 @@ public class MeteoActivity extends AppCompatActivity {
         buttonFetchURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jsonParse();
+                jsonParse("94080");
             }
         });
     }
 
-    private void jsonParse() {
+    private void jsonParse(String insee) {
 
-        String url = "https://api.meteo-concept.com/api/forecast/daily/0?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=Rennes";
+        text_showTempMin.setText("");
+        String url = "https://api.meteo-concept.com/api/forecast/daily/0?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&insee="+ insee;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            /*
-                            JSONArray jsonArray = response.getJSONArray("forecast");
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject forecast = jsonArray.getJSONObject(i);
-
-                                String tempMin = forecast.getString("tmin");
-
-                                text_showTempMin.append(tempMin);
-
-
-                            JSONObject temp = response.getJSONObject("tmin");
-                            String tempMin = temp.toString();
-                            text_showTempMin.append(tempMin);
-*/
                             JSONObject jsonObject2 = response.getJSONObject("city");
                             String city = jsonObject2.getString("name");
 
