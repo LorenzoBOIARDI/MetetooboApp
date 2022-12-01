@@ -130,6 +130,7 @@ public class MeteoActivity extends AppCompatActivity {
         arrayList_Cities.clear();
         arrayList_Insee.clear();
 
+
         String data = enteredCity.getText().toString();
 
         String url = "https://api.meteo-concept.com/api/location/cities?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=" + data;
