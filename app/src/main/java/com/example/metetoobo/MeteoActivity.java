@@ -1,9 +1,13 @@
 package com.example.metetoobo;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,10 +56,14 @@ public class MeteoActivity extends AppCompatActivity {
         mQueue = Volley.newRequestQueue(this);
 
 
+
+
         buttonCitySearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 searchCity();
+                closeKeyBoard();
             }
         });
 
@@ -65,7 +73,8 @@ public class MeteoActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,  /* android standard layout for a single entry from list: just some text and just a horizontal separator */
                 arrayList_Cities /* the List<T> contents */);
-        listView_showFoundCities.setAdapter(adapter);
+
+
 
         /* listen to clicks on a view whose contents depend on an adapter. that's our case */
         listView_showFoundCities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,8 +105,11 @@ public class MeteoActivity extends AppCompatActivity {
                             JSONObject jsonObject1 = response.getJSONObject("forecast");
                             String tempMin = jsonObject1.getString("tmin");
                             String tempMax = jsonObject1.getString("tmax");
+                            String probaRain = jsonObject1.getString("probarain");
+                            String weather = jsonObject1.getString("weather");
 
-                            text_showTemp.append("Ville de " + city+ " :\n" + "temp min :" + tempMin + " °C \n" + "temp max :" + tempMax + " °C");
+                            text_showTemp.append("Ville de " + city+ " :\n" + "temp min :" + tempMin + " °C \n" + "temp max :" + tempMax + " °C\n"
+                             + "proba pluie :" + probaRain + " %");
 
 
                         } catch (JSONException e) {
@@ -140,6 +152,8 @@ public class MeteoActivity extends AppCompatActivity {
                                 arrayList_Insee.add(cityInsee);
 
 
+                                listView_showFoundCities.setAdapter(adapter);
+
                             }
 
                         } catch (JSONException e) {
@@ -153,6 +167,15 @@ public class MeteoActivity extends AppCompatActivity {
             }
         });
         mQueue.add(request);
+    }
+
+    private void closeKeyBoard(){
+        View view = this.getCurrentFocus();
+        if (view != null){
+            InputMethodManager imm = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
 }

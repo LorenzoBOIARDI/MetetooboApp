@@ -9,6 +9,8 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".MainActivity">
 
     <EditText
@@ -19,14 +21,8 @@
         android:inputType="textCapSentences"
         android:maxLength="30"
         android:maxLines="1"
+        android:imeOptions="actionDone"
         />
-
-    <ListView
-        android:id="@+id/lv_result"
-        android:layout_width="wrap_content"
-        android:layout_height="389dp"
-        android:textColor="@android:color/black"
-        android:textSize="15sp" />
 
     <Button
         android:id="@+id/btn_citySearch"
@@ -35,11 +31,20 @@
         android:layout_gravity="center_horizontal"
         android:text="Rechercher"/>
 
+
+    <ListView
+        android:id="@+id/lv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="389dp"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
+
     <TextView
     android:id="@+id/text_showTempMin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="@android:color/black"
     android:textSize="25sp" />
+
 
     </LinearLayout>
