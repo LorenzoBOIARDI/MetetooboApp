@@ -1,10 +1,16 @@
 package com.example.metetoobo;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,37 +19,69 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MeteoActivity extends AppCompatActivity {
 
-    private TextView text_showTempMin;
+    private EditText enteredCity;
+    private TextView text_showTemp;
+    private ListView listView_showFoundCities;
     private RequestQueue mQueue;
+    ArrayList<String> arrayList_Cities;
+    ArrayList<String> arrayList_Insee;
+    ArrayAdapter<String> adapter;
+
 
     public MeteoActivity() {
     }
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meteo);
-        text_showTempMin = findViewById(R.id.text_showTempMin);
-        Button buttonFetchURL = findViewById(R.id.btn_fetchData);
+        enteredCity = (EditText) findViewById(R.id.et_City);
+        listView_showFoundCities = findViewById(R.id.lv_result);
+        text_showTemp = findViewById(R.id.text_showTempMin);
+        Button buttonCitySearch = findViewById(R.id.btn_citySearch);
 
         mQueue = Volley.newRequestQueue(this);
 
-        buttonFetchURL.setOnClickListener(new View.OnClickListener() {
+
+        buttonCitySearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jsonParse("94080");
+                searchCity();
+            }
+        });
+
+        arrayList_Cities = new ArrayList<>();
+        arrayList_Insee = new ArrayList<>();
+
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,  /* android standard layout for a single entry from list: just some text and just a horizontal separator */
+                arrayList_Cities /* the List<T> contents */);
+        listView_showFoundCities.setAdapter(adapter);
+
+        /* listen to clicks on a view whose contents depend on an adapter. that's our case */
+        listView_showFoundCities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+
+                // Show a Toast message on item  click
+                //Toast.makeText(MeteoActivity.this, "You clicked : " + arrayList_Insee.get(pos), Toast.LENGTH_SHORT).show();
+                jsonParse(arrayList_Insee.get(pos));
             }
         });
     }
 
     private void jsonParse(String insee) {
 
-        text_showTempMin.setText("");
+        text_showTemp.setText("");
         String url = "https://api.meteo-concept.com/api/forecast/daily/0?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&insee="+ insee;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -51,6 +89,7 @@ public class MeteoActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+
                             JSONObject jsonObject2 = response.getJSONObject("city");
                             String city = jsonObject2.getString("name");
 
@@ -58,8 +97,7 @@ public class MeteoActivity extends AppCompatActivity {
                             String tempMin = jsonObject1.getString("tmin");
                             String tempMax = jsonObject1.getString("tmax");
 
-                            text_showTempMin.append("Ville de " + city+ " :\n" + "temp min :" + tempMin + "\n" + "temp max :" + tempMax);
-
+                            text_showTemp.append("Ville de " + city+ " :\n" + "temp min :" + tempMin + " °C \n" + "temp max :" + tempMax + " °C");
 
 
                         } catch (JSONException e) {
@@ -75,48 +113,46 @@ public class MeteoActivity extends AppCompatActivity {
         mQueue.add(request);
     }
 
-/*
-    class FetchData extends Thread{
+    private void searchCity(){
 
-        String data = "";
+        arrayList_Cities.clear();
+        arrayList_Insee.clear();
 
-        FetchData() {
-        Log.d("METEOACTIVITY", "entering constructor");
-        }
-        public void runFetch(String ville) {
-            try {
-                //URL url = new URL("https://api.meteo-concept.com/api/forecast/daily?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=" + ville);
-                URL url = new URL("https://api.meteo-concept.com/api/forecast/daily/0?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=Rennes");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
+        String data = enteredCity.getText().toString();
 
-                while ((line = bufferedReader.readLine()) != null){
-                    data = data + line;
-                }
+        String url = "https://api.meteo-concept.com/api/location/cities?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=" + data;
 
-                if (!data.isEmpty()){
-                    JSONObject jsonObject = new JSONObject(data);
-                    JSONArray temperatureMin = jsonObject.getJSONArray("tmin");
-                    String tempMinString = temperatureMin.toString();
-                    TextView textView = findViewById(R.id.text_showTempMin);
-                    //textView.setText(tempMinString);
-                    textView.setText("test1");
-                }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("cities");
 
-            } catch (MalformedURLException e){
-                e.printStackTrace();
-            } catch (IOException e){
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject city = jsonArray.getJSONObject(i);
+
+                                String cityName = city.getString("name");
+                                String cityCP = city.getString("cp");
+                                String cityInsee = city.getString("insee");
+
+                                arrayList_Cities.add(cityName + " - " + cityCP);
+                                arrayList_Insee.add(cityInsee);
+
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
-        }
-
-
-
+        });
+        mQueue.add(request);
     }
 
- */
 }
