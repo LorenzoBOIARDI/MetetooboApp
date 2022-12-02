@@ -38,6 +38,15 @@ public class MeteoActivity extends AppCompatActivity {
     ArrayList<String> arrayList_Cities;
     ArrayList<String> arrayList_Insee;
     ArrayAdapter<String> adapter;
+    String weatherStatus;
+
+    public static String tempMin;
+    public static String tempMax;
+    public static String probaRain;
+    public static int weather;
+    public static String city;
+
+    MeteoIndex weatherHashmap = new MeteoIndex();
 
 
     public MeteoActivity() {
@@ -61,9 +70,9 @@ public class MeteoActivity extends AppCompatActivity {
         buttonCitySearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 searchCity();
                 closeKeyBoard();
+
             }
         });
 
@@ -76,7 +85,7 @@ public class MeteoActivity extends AppCompatActivity {
 
 
 
-        /* listen to clicks on a view whose contents depend on an adapter. that's our case */
+        /* listen to clicks on a view whose contents depend on an adapter. that's our case
         listView_showFoundCities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -86,6 +95,8 @@ public class MeteoActivity extends AppCompatActivity {
                 jsonParse(arrayList_Insee.get(pos));
             }
         });
+
+         */
     }
 
     private void jsonParse(String insee) {
@@ -100,16 +111,18 @@ public class MeteoActivity extends AppCompatActivity {
                         try {
 
                             JSONObject jsonObject2 = response.getJSONObject("city");
-                            String city = jsonObject2.getString("name");
+                            city = jsonObject2.getString("name");
 
                             JSONObject jsonObject1 = response.getJSONObject("forecast");
-                            String tempMin = jsonObject1.getString("tmin");
-                            String tempMax = jsonObject1.getString("tmax");
-                            String probaRain = jsonObject1.getString("probarain");
-                            String weather = jsonObject1.getString("weather");
+                            tempMin = jsonObject1.getString("tmin");
+                            tempMax = jsonObject1.getString("tmax");
+                            probaRain = jsonObject1.getString("probarain");
+                            weather = Integer.valueOf(jsonObject1.getString("weather"));
+
+                            weatherStatus = weatherHashmap.getWeatherHashmap(weather);
 
                             text_showTemp.append("Ville de " + city+ " :\n" + "temp min :" + tempMin + " °C \n" + "temp max :" + tempMax + " °C\n"
-                             + "proba pluie :" + probaRain + " %");
+                                    + "proba pluie :" + probaRain + " %\n" + weatherStatus);
 
 
                         } catch (JSONException e) {
@@ -130,7 +143,6 @@ public class MeteoActivity extends AppCompatActivity {
         arrayList_Cities.clear();
         arrayList_Insee.clear();
 
-
         String data = enteredCity.getText().toString();
 
         String url = "https://api.meteo-concept.com/api/location/cities?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=" + data;
@@ -142,20 +154,39 @@ public class MeteoActivity extends AppCompatActivity {
                         try {
                             JSONArray jsonArray = response.getJSONArray("cities");
 
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject city = jsonArray.getJSONObject(i);
 
-                                String cityName = city.getString("name");
-                                String cityCP = city.getString("cp");
-                                String cityInsee = city.getString("insee");
+                            if (jsonArray.length()==0){
+                                arrayList_Cities.add("Aucun résultat !");
+                                listView_showFoundCities.setOnItemClickListener(null); //rend les objets de la listview inclickables
+                            }
 
-                                arrayList_Cities.add(cityName + " - " + cityCP);
-                                arrayList_Insee.add(cityInsee);
+                            else {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject city = jsonArray.getJSONObject(i);
+
+                                    String cityName = city.getString("name");
+                                    String cityCP = city.getString("cp");
+                                    String cityInsee = city.getString("insee");
+
+                                    arrayList_Cities.add(cityName + " - " + cityCP);
+                                    arrayList_Insee.add(cityInsee);
+
+                                    listView_showFoundCities.setOnItemClickListener(new AdapterView.OnItemClickListener() { //rend clickable les objets de la listview
+                                        @Override
+                                        public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                                            // Show a Toast message on item  click
+                                            //Toast.makeText(MeteoActivity.this, "You clicked : " + arrayList_Insee.get(pos), Toast.LENGTH_SHORT).show();
+
+                                            jsonParse(arrayList_Insee.get(pos)); //appelle jsonParse avec le code insee de la ville selectionnee
+                                        }
+                                    });
 
 
-                                listView_showFoundCities.setAdapter(adapter);
+                                }
 
                             }
+
+                            listView_showFoundCities.setAdapter(adapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -170,7 +201,7 @@ public class MeteoActivity extends AppCompatActivity {
         mQueue.add(request);
     }
 
-    private void closeKeyBoard(){
+    private void closeKeyBoard(){ //ferme le clavier
         View view = this.getCurrentFocus();
         if (view != null){
             InputMethodManager imm = (InputMethodManager)
