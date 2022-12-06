@@ -26,10 +26,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static final String EXTRA_MESSAGE = "com.example.metetoobo.MESSAGE";
+    LinearLayout linearLayout;
 
     private EditText enteredCity;
     private TextView text_showTemp;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static String tempMax;
     public static String probaRain;
     public static int weather;
+    public static String sunHours;
     public static String city;
 
     MeteoIndex weatherHashmap = new MeteoIndex();
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     public MainActivity() {
     }
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint({"WrongViewCast", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                             tempMax = jsonObject1.getString("tmax");
                             probaRain = jsonObject1.getString("probarain");
                             weather = Integer.valueOf(jsonObject1.getString("weather"));
+                            sunHours = jsonObject1.getString("sun_hours");
 
                             weatherStatus = weatherHashmap.getWeatherHashmap(weather);
                             /*
@@ -217,9 +219,15 @@ public class MainActivity extends AppCompatActivity {
     public void goToToobo() {
         // Do something in response to button
         Intent intent = new Intent(this, TooboActivity.class);
-        String message = ("Ville de " + city+ " :\n" + "temp min :" + tempMin + " °C \n" + "temp max :" + tempMax + " °C\n"
-                + "proba pluie :" + probaRain + " %\n" + weatherStatus);
-        intent.putExtra(EXTRA_MESSAGE, message);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("temp_max", tempMax);
+        bundle.putString("temp_min", tempMin);
+        bundle.putString("city", city);
+        bundle.putString("proba_rain", probaRain);
+        bundle.putString("weather", weatherStatus);
+        bundle.putString("sun_hours", sunHours);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
