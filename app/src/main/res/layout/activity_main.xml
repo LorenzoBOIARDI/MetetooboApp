@@ -18,6 +18,7 @@
         android:id="@+id/et_City"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:hint="Entrer nom de ville ou code postal"
         android:inputType="textCapSentences"
         android:maxLength="30"
