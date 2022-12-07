@@ -15,6 +15,7 @@ public class TooboActivity extends AppCompatActivity {
     public static String weather;
     public static String sunHours;
     public static String city;
+    public static String weatherForPicture;
 
     private TextView text_showTempMax;
     private TextView text_showTempMin;
@@ -44,6 +45,7 @@ public class TooboActivity extends AppCompatActivity {
         weather = bundle.getString("weather");
         sunHours = bundle.getString("sun_hours");
         city = bundle.getString("city");
+        weatherForPicture = bundle.getString("weather_for_picture");
 
         text_showTempMax.setText("Température maximale : " + tempMax + " °C");
         text_showTempMin.setText("Température minimale : " + tempMin + " °C");
@@ -66,9 +68,9 @@ public class TooboActivity extends AppCompatActivity {
 
     public void goToMetetoobo() {
         // Do something in response to button
-        Intent intent = new Intent(this, MetetooboActivity.class);
-
-        startActivity(intent);
+        Intent intent2 = new Intent(this, MetetooboActivity.class);
+        intent2.putExtra("weather_for_picture",weatherForPicture);
+        startActivity(intent2);
     }
 
 

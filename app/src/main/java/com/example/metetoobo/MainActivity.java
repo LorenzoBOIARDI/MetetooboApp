@@ -40,10 +40,13 @@ public class MainActivity extends AppCompatActivity {
     String weatherStatus;
 
     public static String tempMin;
+    public static int tempMinInt;
     public static String tempMax;
     public static String probaRain;
     public static int weather;
     public static String sunHours;
+    public static String weatherForPicture;
+    public static String weatherState;
     public static String city;
 
     MeteoIndex weatherHashmap = new MeteoIndex();
@@ -115,10 +118,28 @@ public class MainActivity extends AppCompatActivity {
 
                             JSONObject jsonObject1 = response.getJSONObject("forecast");
                             tempMin = jsonObject1.getString("tmin");
+                            tempMinInt = Integer.valueOf(jsonObject1.getString("tmin"));
                             tempMax = jsonObject1.getString("tmax");
                             probaRain = jsonObject1.getString("probarain");
                             weather = Integer.valueOf(jsonObject1.getString("weather"));
                             sunHours = jsonObject1.getString("sun_hours");
+
+                            if (weather < 9){ //si il pleut pas
+                                weatherState = "soleil";
+                            }
+                            else {
+                                weatherState = "pluie"; //si il pleut
+                                weatherForPicture = "pluie";
+                            }
+
+                            if (weatherState == "soleil" && tempMinInt < 10){ //si il pleut pas mais qu'il fait froid
+                                weatherForPicture = "froid";
+                            }
+
+                            if (weatherState == "soleil" && tempMinInt >= 10){ //si il pleut pas mais qu'il fait chaud
+                                weatherForPicture = "soleil";
+                            }
+
 
                             weatherStatus = weatherHashmap.getWeatherHashmap(weather);
                             /*
@@ -226,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
         bundle.putString("proba_rain", probaRain);
         bundle.putString("weather", weatherStatus);
         bundle.putString("sun_hours", sunHours);
+        bundle.putString("weather_for_picture", weatherForPicture);
         intent.putExtras(bundle);
         startActivity(intent);
     }
