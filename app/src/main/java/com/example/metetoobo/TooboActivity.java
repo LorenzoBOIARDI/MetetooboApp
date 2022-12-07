@@ -70,6 +70,8 @@ public class TooboActivity extends AppCompatActivity {
         // Do something in response to button
         Intent intent2 = new Intent(this, MetetooboActivity.class);
         intent2.putExtra("weather_for_picture",weatherForPicture);
+        intent2.putExtra("weather_status", weather);
+        intent2.putExtra("temp_min", tempMin);
         startActivity(intent2);
     }
 
