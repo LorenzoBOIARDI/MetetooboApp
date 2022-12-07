@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
-    LinearLayout linearLayout;
 
     private EditText enteredCity;
     private TextView text_showTemp;

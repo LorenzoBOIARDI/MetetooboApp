@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class TooboActivity extends AppCompatActivity {
@@ -45,14 +46,30 @@ public class TooboActivity extends AppCompatActivity {
         city = bundle.getString("city");
 
         text_showTempMax.setText("Température maximale : " + tempMax + " °C");
-        text_showTempMin.setText("Température maximale : " + tempMin + " °C");
+        text_showTempMin.setText("Température minimale : " + tempMin + " °C");
         text_showRain.setText("Probabilité de pluie : " + probaRain + " %");
         text_showWeather.setText(weather);
         text_showSun.setText("Ensoleillement : " + sunHours + "h");
         text_showCity.setText(city);
+
+
+        Button buttonGoToToobo = findViewById(R.id.button_metetoboo);
+
+        buttonGoToToobo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToMetetoobo();
+
+            }
+        });
     }
 
+    public void goToMetetoobo() {
+        // Do something in response to button
+        Intent intent = new Intent(this, MetetooboActivity.class);
 
+        startActivity(intent);
+    }
 
 
 }
