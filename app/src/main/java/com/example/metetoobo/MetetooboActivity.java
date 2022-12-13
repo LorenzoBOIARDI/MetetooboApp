@@ -12,6 +12,7 @@ public class MetetooboActivity extends AppCompatActivity {
     private String tempsActuel;
     private String weatherStatus;
     private String tempMin;
+    private String city;
 
     private TextView textView;
 
@@ -26,8 +27,9 @@ public class MetetooboActivity extends AppCompatActivity {
         tempsActuel = intent2.getStringExtra("weather_for_picture");
         weatherStatus = intent2.getStringExtra("weather_status");
         tempMin = intent2.getStringExtra("temp_min");
+        city = intent2.getStringExtra("city");
 
-        textView.setText(weatherStatus + ", température minimale de " + tempMin + " °C... \nVoici la tenue que nous te recommandons !");
+        textView.setText(weatherStatus + ", température minimale de " + tempMin + " °C... \nVoici la tenue que nous te recommandons aujourd'hui à " + city +" !");
 
         pictureDisplay(tempsActuel);
     }

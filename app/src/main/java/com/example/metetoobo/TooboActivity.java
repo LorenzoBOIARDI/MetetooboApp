@@ -72,6 +72,7 @@ public class TooboActivity extends AppCompatActivity {
         intent2.putExtra("weather_for_picture",weatherForPicture);
         intent2.putExtra("weather_status", weather);
         intent2.putExtra("temp_min", tempMin);
+        intent2.putExtra("city", city);
         startActivity(intent2);
     }
 
