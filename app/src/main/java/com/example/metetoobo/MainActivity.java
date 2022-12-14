@@ -29,9 +29,8 @@ import java.util.ArrayList;
 import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
-
+    //declaration variables
     private EditText enteredCity;
-    private TextView text_showTemp;
     private ListView listView_showFoundCities;
     private RequestQueue mQueue;
     ArrayList<String> arrayList_Cities;
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public static String weatherState;
     public static String city;
 
-    MeteoIndex weatherHashmap = new MeteoIndex();
+    MeteoIndex weatherHashmap = new MeteoIndex(); //appel de la classe contenant la Hashmap weather
 
 
     public MainActivity() {
@@ -57,12 +56,13 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint({"WrongViewCast", "ResourceAsColor"})
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //fonction lue au lancement de l'activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //initialisation des edittext/listview/bouton
         enteredCity = (EditText) findViewById(R.id.et_City);
         listView_showFoundCities = findViewById(R.id.lv_result);
-        text_showTemp = findViewById(R.id.text_showTempMin);
         Button buttonCitySearch = findViewById(R.id.btn_citySearch);
 
         mQueue = Volley.newRequestQueue(this);
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        buttonCitySearch.setOnClickListener(new View.OnClickListener() {
+        buttonCitySearch.setOnClickListener(new View.OnClickListener() {  //lu quand on clique sur le bouton recherche
             @Override
             public void onClick(View view) {
                 searchCity();
@@ -86,25 +86,10 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,  /* android standard layout for a single entry from list: just some text and just a horizontal separator */
                 arrayList_Cities /* the List<T> contents */);
 
-
-
-        /* listen to clicks on a view whose contents depend on an adapter. that's our case
-        listView_showFoundCities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-
-                // Show a Toast message on item  click
-                //Toast.makeText(MainActivity.this, "You clicked : " + arrayList_Insee.get(pos), Toast.LENGTH_SHORT).show();
-                jsonParse(arrayList_Insee.get(pos));
-            }
-        });
-
-         */
     }
 
-    private void jsonParse(String insee) {
+    private void jsonParse(String insee) { //fonction qui accède à l'api avec comme paramètre le code insee de la ville choisie
 
-        text_showTemp.setText("");
         String url = "https://api.meteo-concept.com/api/forecast/daily/0?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&insee="+ insee;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -112,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-
+                            //récupération des données contenues dans le JSON obtenu en reponse
                             JSONObject jsonObject2 = response.getJSONObject("city");
                             city = jsonObject2.getString("name");
 
@@ -124,11 +109,11 @@ public class MainActivity extends AppCompatActivity {
                             weather = Integer.valueOf(jsonObject1.getString("weather"));
                             sunHours = jsonObject1.getString("sun_hours");
 
-                            if (weather < 9){ //si il pleut pas
+                            if (weather < 9){ //si il pleut pas, voir MeteoIndex
                                 weatherState = "soleil";
                             }
                             else {
-                                weatherState = "pluie"; //si il pleut
+                                weatherState = "pluie"; //si il pleut, voir MeteoIndex
                                 weatherForPicture = "pluie";
                             }
 
@@ -141,12 +126,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
 
-                            weatherStatus = weatherHashmap.getWeatherHashmap(weather);
-                            /*
-                            text_showTemp.append("Ville de " + city+ " :\n" + "temp min :" + tempMin + " °C \n" + "temp max :" + tempMax + " °C\n"
-                                    + "proba pluie :" + probaRain + " %\n" + weatherStatus);
-
-                             */
+                            weatherStatus = weatherHashmap.getWeatherHashmap(weather); //recuperation de la string meteo grace à l'index
 
                             goToToobo();
 
@@ -166,10 +146,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void searchCity(){
 
-        arrayList_Cities.clear();
-        arrayList_Insee.clear();
+        arrayList_Cities.clear(); //vide l'arraylist affichée dans la listview
+        arrayList_Insee.clear(); //vide l'arraylist comportant les codes insee des villes affichées
 
-        String data = enteredCity.getText().toString();
+        String data = enteredCity.getText().toString(); //acquisition du nom de la ville cliquée
 
         String url = "https://api.meteo-concept.com/api/location/cities?token=3722d305e101385ebbccdecd7a878d85122bbdd79857766fcfbd2dce06650d2c&search=" + data;
 
@@ -181,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONArray jsonArray = response.getJSONArray("cities");
 
 
-                            if (jsonArray.length()==0){
+                            if (jsonArray.length()==0){ //si le json recu est vide
                                 arrayList_Cities.add("Aucun résultat !");
                                 listView_showFoundCities.setOnItemClickListener(null); //rend les objets de la listview inclickables
                             }
@@ -204,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                                             //Toast.makeText(MeteoActivity.this, "You clicked : " + arrayList_Insee.get(pos), Toast.LENGTH_SHORT).show();
 
                                             jsonParse(arrayList_Insee.get(pos)); //appelle jsonParse avec le code insee de la ville selectionnee
+                                            //l'indice de l'arraylist de l'insee correspond à l'indice cliqué dans la listview
                                         }
                                     });
 
@@ -238,9 +219,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToToobo() {
         // Do something in response to button
-        Intent intent = new Intent(this, TooboActivity.class);
+        Intent intent = new Intent(this, TooboActivity.class); //creation de l'intent pour l'activity toobo (météo)
 
-        Bundle bundle = new Bundle();
+        Bundle bundle = new Bundle(); //mise en bundle des variables à transmettre à l'activity toobo
         bundle.putString("temp_max", tempMax);
         bundle.putString("temp_min", tempMin);
         bundle.putString("city", city);
@@ -248,8 +229,8 @@ public class MainActivity extends AppCompatActivity {
         bundle.putString("weather", weatherStatus);
         bundle.putString("sun_hours", sunHours);
         bundle.putString("weather_for_picture", weatherForPicture);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        intent.putExtras(bundle); //envoi du bundle
+        startActivity(intent); //demarrage de l'activity toobo
     }
 
 }

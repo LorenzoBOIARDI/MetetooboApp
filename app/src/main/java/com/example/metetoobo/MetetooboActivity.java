@@ -23,18 +23,21 @@ public class MetetooboActivity extends AppCompatActivity {
         this.imageView = (ImageView) this.findViewById(R.id.imageView_toobo);
         textView = findViewById(R.id.textView_toobo);
 
+        //recuperation des données
         Intent intent2 = getIntent();
         tempsActuel = intent2.getStringExtra("weather_for_picture");
         weatherStatus = intent2.getStringExtra("weather_status");
         tempMin = intent2.getStringExtra("temp_min");
         city = intent2.getStringExtra("city");
 
+        //affichage des données
         textView.setText(weatherStatus + ", température minimale de " + tempMin + " °C... \nVoici la tenue que nous te recommandons aujourd'hui à " + city +" !");
 
+        //affichage de l'image selectionnee selon la meteo
         pictureDisplay(tempsActuel);
     }
 
-    public void pictureDisplay (String temps){
+    public void pictureDisplay (String temps){ //choix de l'image a afficher selon la meteo
 
         switch (temps) {
             case "soleil":
@@ -51,10 +54,5 @@ public class MetetooboActivity extends AppCompatActivity {
                 this.imageView.setImageResource(R.drawable.toobo_froid);
         }
     }
-
-
-
-
-
 
 }

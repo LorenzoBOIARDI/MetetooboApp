@@ -37,7 +37,7 @@ public class TooboActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-
+        //recuperation des données de l'activity main
         Bundle bundle = getIntent().getExtras();
         tempMax = bundle.getString("temp_max");
         tempMin = bundle.getString("temp_min");
@@ -47,6 +47,7 @@ public class TooboActivity extends AppCompatActivity {
         city = bundle.getString("city");
         weatherForPicture = bundle.getString("weather_for_picture");
 
+        //affichage des données
         text_showTempMax.setText("Température maximale : " + tempMax + " °C");
         text_showTempMin.setText("Température minimale : " + tempMin + " °C");
         text_showRain.setText("Probabilité de pluie : " + probaRain + " %");
@@ -59,21 +60,21 @@ public class TooboActivity extends AppCompatActivity {
 
         buttonGoToToobo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) { //lancé quand on clique sur le bouton
                 goToMetetoobo();
-
             }
         });
     }
 
     public void goToMetetoobo() {
         // Do something in response to button
-        Intent intent2 = new Intent(this, MetetooboActivity.class);
+        Intent intent2 = new Intent(this, MetetooboActivity.class); //creation de l'intent pour l'activity metetoobo
+        //envoi des données à l'activity metetoobo
         intent2.putExtra("weather_for_picture",weatherForPicture);
         intent2.putExtra("weather_status", weather);
         intent2.putExtra("temp_min", tempMin);
         intent2.putExtra("city", city);
-        startActivity(intent2);
+        startActivity(intent2); //demarrage de l'activity metetoobo
     }
 
 
