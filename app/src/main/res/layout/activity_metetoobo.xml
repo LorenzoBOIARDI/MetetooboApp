@@ -13,24 +13,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.669"
+        app:layout_constraintTop_toBottomOf="@+id/textView_toobo"
         tools:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
         android:id="@+id/textView_toobo"
         android:layout_width="375dp"
         android:layout_height="157dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/black_corner_drawable"
         android:gravity="center"
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView_toobo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.063" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
